@@ -1,0 +1,49 @@
+plugins {
+    id "groovy"
+    id "java"
+    id "idea"
+}
+
+group 'ru.megboyzz'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'BashMain'
+    }
+    from {
+        configurations.runtimeClasspath.filter{ it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    exclude(
+            'META-INF/*.SF',
+            'META-INF/*.DSA',
+            'META-INF/*.RSA'
+    )
+}
+
+
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation group: 'de.schlichtherle.truezip', name: 'truezip-file', version: '7.7.10'
+    implementation group: 'de.schlichtherle.truezip', name: 'truezip-driver-file', version: '7.7.10'
+    implementation group: 'de.schlichtherle.truezip', name: 'truezip-driver-tar', version: '7.7.10'
+    implementation group: 'de.schlichtherle.truezip', name: 'truezip-driver-zip', version: '7.7.10'
+}
+
+test {
+    useJUnitPlatform()
+}
+
