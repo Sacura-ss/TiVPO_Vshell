@@ -1,10 +1,13 @@
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TFile;
+
 import java.util.Scanner;
 
 public class Bash {
 
-    //Скписок комманд
+    public static boolean isTesting = false;
+
+    //Список комманд
     private final static String cd_command = "cd";
     private final static String pwd_command = "pwd";
     private final static String ls_command = "ls";
@@ -54,8 +57,42 @@ public class Bash {
                     "\n" +
                     "Чтобы удалить папку/файл используте rm <имя удаляемого объекта>";
 
-    public static void main(String[] args) {
+    private static void ls(String... args) {
+
+        TFile oldFileSystem = fileSystem;
+        String old_root = root_current_folder;
+        String old_folder = current_folder;
+
+        boolean allInfo = false;
+        boolean no = false;
+        if (args.length > 0) {
+            for (String cmd : args) {
+                if (cmd.equals("-a")) allInfo = true;
+                if (cmd.startsWith("/") | cmd.startsWith(".")) {
+                    cd(cmd);
+                    no = true;
+                }
+            }
+        }
+
+
+        for (String name : fileSystem.list()) {
+            if (allInfo)
+                if (new TFile(fileSystem.getAbsoluteFile() + "/" + name).isFile())
+                    System.out.print("Файл - ");
+                else
+                    System.out.print("Папка - ");
+            System.out.println(name + " ");
+        }
+        if (no) {
+            root_current_folder = old_root;
+            current_folder = old_folder;
+        }
+        fileSystem = oldFileSystem;
 
     }
 
+    public static void main(String[] args) {
+
+    }
 }
