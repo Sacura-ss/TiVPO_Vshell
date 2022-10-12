@@ -283,5 +283,20 @@ public class Bash {
             System.out.println(args[0] + " - путь. Чтение не возможно.");
             return;
         }
+        //Запуск
+        System.out.println(
+                "Vshell by megboyZZ v0.1\n" +
+                        "Напечатайте help для получения помощи\n");
+
+        //Инициализация функциональных полей
+        detector = new TArchiveDetector(separator);
+
+        fileSystem = new TFile(file, detector);
+
+        main_root = fileSystem.getAbsolutePath();
+
+        in = new Scanner(System.in);
+
+
     }
 }
