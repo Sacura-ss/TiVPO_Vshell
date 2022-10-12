@@ -57,6 +57,38 @@ public class Bash {
                     "\n" +
                     "Чтобы удалить папку/файл используте rm <имя удаляемого объекта>";
 
+    //Блок функций реализующих комнды Bash
+    private static void cd(String... args){
+        if(args.length == 0) return;
+        TFile oldFileSystem = fileSystem;
+        String old_root = root_current_folder;
+        String old_folder = current_folder;
+
+        if(args[0].startsWith(".") & !args[0].startsWith("..")) {
+            root_current_folder = args[0].replaceFirst(".", root_current_folder);
+            root_current_folder = root_current_folder.replaceFirst("//", "/");
+        }else
+        if(args[0].startsWith(".."))
+            root_current_folder = root_current_folder.substring(0, root_current_folder.lastIndexOf("/"));
+
+        if(args[0].startsWith("/")) root_current_folder = args[0];
+
+        String[] a = root_current_folder.split("/");
+        if(a.length > 1)
+            current_folder = "/" + a[a.length - 1];
+        else
+            current_folder = "/";
+
+        fileSystem = new TFile(main_root + root_current_folder, detector);
+        if(!fileSystem.exists()){
+            System.out.println("Путь " + root_current_folder + " - не существует");
+            root_current_folder = old_root;
+            current_folder = old_folder;
+            fileSystem = oldFileSystem;
+        }
+
+    }
+
     private static void ls(String... args) {
 
         TFile oldFileSystem = fileSystem;
