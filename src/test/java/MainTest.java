@@ -60,4 +60,11 @@ public class MainTest {
         assert outContent.toString().contains("Hello from nano");
     }
 
+    @Test //Тестируем команду cat
+    public void testCat(){
+        String data = "cat file.txt";
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+        Bash.main(new String[]{"D:/test.zip"});
+        assert outContent.toString().contains("Hello world!");
+    }
 }
