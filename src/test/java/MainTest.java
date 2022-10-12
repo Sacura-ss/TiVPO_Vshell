@@ -39,4 +39,18 @@ public class MainTest {
         assert outContent.toString().contains("colorlib-regform-4")
                 & outContent.toString().contains("login-form-v2");
     }
+
+    @Test //Тестируем команду mkdir s, s - название папки, и проверяем ее наличие в ls
+    public void testMkdir(){
+
+        String data = "mkdir s\r\nls";
+
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+
+        Bash.main(new String[]{"D:/test.zip"});
+
+        assert outContent.toString().contains("s");
+
+    }
+
 }
