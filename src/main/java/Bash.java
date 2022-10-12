@@ -1,6 +1,9 @@
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TFile;
-
+import de.schlichtherle.truezip.file.TFileWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Scanner;
 
 public class Bash {
@@ -88,7 +91,55 @@ public class Bash {
         }
 
     }
+    private static void nano(String... args) {
+        if(args.length == 0) return;
 
+        TFile oldFileSystem = fileSystem;
+
+        if(args[0].startsWith(".")) {
+            root_current_folder = args[0].replaceFirst(".", root_current_folder);
+            root_current_folder = root_current_folder.replaceFirst("//", "/");
+        }
+
+        fileSystem = new TFile(main_root + root_current_folder + args[0], detector);
+        if(!fileSystem.exists()) {
+            try {
+                fileSystem.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("nano vshell edition by megboyZZ");
+
+        String in_file = "";
+
+        Writer writer;
+        try {
+            writer = new TFileWriter(fileSystem);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        while(true){
+            try {
+                in_file = in.nextLine();
+                if(in_file.equals(args[0])) break;
+                writer.write(in_file + "\n");
+            } catch (IOException ignored){
+            }
+        }
+
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        fileSystem = oldFileSystem;
+
+    }
     private static void ls(String... args) {
 
         TFile oldFileSystem = fileSystem;
