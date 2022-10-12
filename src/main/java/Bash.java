@@ -297,6 +297,34 @@ public class Bash {
 
         in = new Scanner(System.in);
 
+        //Основной цикл Bash
+        while(true) {
 
+            System.out.print("~$" + current_folder + ">");
+            String[] command = in.nextLine().split(" ");//cat lflfl lflflfl
+            //Выбор команд Bash
+            if (cd_command.equals(command[0])) {
+                cd(Arrays.copyOfRange(command, 1, command.length));
+            } else if (pwd_command.equals(command[0])) {
+                System.out.println(root_current_folder);
+            } else if (ls_command.equals(command[0])) {
+                ls(Arrays.copyOfRange(command, 1, command.length));
+            } else if (cat_command.equals(command[0])) {
+                cat(Arrays.copyOfRange(command, 1, command.length));
+            } else if (nano_command.equals(command[0])) {
+                nano(Arrays.copyOfRange(command, 1, command.length));
+            } else if (mkdir_command.equals(command[0])) {
+                mkdir(Arrays.copyOfRange(command, 1, command.length));
+                //case rm_command -> rm(Arrays.copyOfRange(command, 1, command.length));
+            } else if (quit_command.equals(command[0])) {
+                return;
+            } else if (help_command.equals(command[0])) {
+                System.out.println(help_out);
+            } else if (clear_command.equals(command[0])) {
+                for (int i = 0; i < 50; ++i) System.out.print("\n");
+            } else {
+                System.out.println("команда '" + command[0] + "' не найдена, проверьте написание");
+            }
+        }
     }
 }
