@@ -52,5 +52,12 @@ public class MainTest {
         assert outContent.toString().contains("s");
 
     }
+    @Test
+    public void testNano(){
+        String data = "nano file2.txt\r\nHello from nano\r\nfile2.txt\r\ncat file2.txt";
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+        Bash.main(new String[]{"D:/test.zip"});
+        assert outContent.toString().contains("Hello from nano");
+    }
 
 }
