@@ -188,6 +188,86 @@ public class Bash {
 
     }
 
+    private static void cat(String... args){
+        if(args.length == 0) return;
+        boolean lineNumber = false;
+        boolean no = false;
+        String fileName = "";
+
+        TFile oldFileSystem = fileSystem;
+        String old_root = root_current_folder;
+        String old_folder = current_folder;
+
+
+        if(args.length > 0){
+            for(String cmd : args) {
+                if (cmd.equals("-n")) lineNumber = true;
+                if ((cmd.startsWith("/") | cmd.startsWith(".")) & !new TFile(fileSystem.getAbsoluteFile() + "/" + cmd).isFile()){
+                    cd(cmd);
+                    no = true;
+                } else fileName = cmd;
+            }
+        }
+
+
+        fileSystem = new TFile(main_root + root_current_folder + fileName, detector);
+        if(!fileSystem.exists()) {
+            System.out.println("Файл " + args[0] + " - не существует");
+            fileSystem = oldFileSystem;
+            root_current_folder = old_root;
+            return;
+        }
+
+        Reader reader;
+        try {
+            reader = new TFileReader(fileSystem);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fileSystem = oldFileSystem;
+            root_current_folder = old_root;
+            return;
+        }
+
+        char[] buf = new char[256];
+        int c = 0;
+        while(true){
+            try {
+                c = reader.read(buf);
+                if (c<=0) break;
+            } catch (IOException e) {
+                fileSystem = oldFileSystem;
+                root_current_folder = old_root;
+                e.printStackTrace();
+            }
+
+            if(c < 256){
+                buf = Arrays.copyOf(buf, c);
+            }
+            if(lineNumber) {
+                String[] str = (new String(buf)).split("\n");
+                for(int i = 1; i <= str.length; i++)
+                    System.out.println(i + " " + str[i-1]);
+            }
+            else
+                System.out.print(buf);
+        }
+
+        try {
+            reader.close();
+        } catch (IOException e) {
+            fileSystem = oldFileSystem;
+            root_current_folder = old_root;
+            e.printStackTrace();
+        }
+
+        if(no){
+            root_current_folder = old_root;
+            current_folder = old_folder;
+        }
+        fileSystem = oldFileSystem;
+
+    }
+
     public static void main(String[] args) {
 
     }
