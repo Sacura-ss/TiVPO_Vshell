@@ -124,6 +124,19 @@ public class Bash {
 
     }
 
+    private static void mkdir(String... args){
+        if(args.length == 0) return;
+
+        TFile oldFileSystem = fileSystem;
+
+        fileSystem = new TFile(main_root + root_current_folder + args[0], detector);
+        if(!fileSystem.exists())
+            fileSystem.mkdir();
+
+        fileSystem = oldFileSystem;
+
+    }
+
     public static void main(String[] args) {
 
     }
