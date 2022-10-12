@@ -67,4 +67,21 @@ public class MainTest {
         Bash.main(new String[]{"D:/test.zip"});
         assert outContent.toString().contains("Hello world!");
     }
+
+    @Test //Тестируем команду pwd из корня
+    public void testPwd(){
+        String data = "pwd";
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+        Bash.main(new String[]{"D:/test.zip"});
+        assert outContent.toString().contains("~$/>/");
+    }
+
+    @Test
+    public void testPwdNonRoot(){ //Тестируем команду pwd не из корня
+        String data = "cd /colorlib-regform-4/js\r\npwd";
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+        Bash.main(new String[]{"D:/test.zip"});
+        assert outContent.toString().contains("/colorlib-regform-4/js");
+    }
+
 }

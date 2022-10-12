@@ -2,9 +2,9 @@ import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TFileWriter;
 import de.schlichtherle.truezip.file.TFileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Writer;
+
+import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Bash {
@@ -270,6 +270,18 @@ public class Bash {
     }
 
     public static void main(String[] args) {
+        //Блок проверок аргументов
+        if(args.length == 0) System.out.println("Файл не передан");
 
+        File file = new File(args[0]);
+
+        if(!file.exists()) {
+            System.out.println("Файл " + args[0] + " не существует.");
+            return;
+        }
+        if(!file.isFile()) {
+            System.out.println(args[0] + " - путь. Чтение не возможно.");
+            return;
+        }
     }
 }
